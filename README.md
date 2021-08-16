@@ -1,5 +1,8 @@
-mySQL_myGB
+myGB_mySQL
+
 Чорнопыский Василий.
-https://gb.ru/education
+
 Материалы занятий по курсу "Основы реляционных баз данных. MySQL"
+
+https://gb.ru/lessons/161648
 
