@@ -1,0 +1,64 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql8-17b4c94ac60-39a13badd046f530": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "localhost",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"url": "jdbc:mysql://localhost:3306/",
+				"type": "dev",
+				"config-profile": "vas@gb-db",
+				"auth-model": "native",
+				"handlers": {
+					"ssh_tunnel": {
+						"type": "TUNNEL",
+						"enabled": true,
+						"save-password": true,
+						"properties": {
+							"port": 22,
+							"keyPath": "/home/vas/.ssh/id_rsa",
+							"implementation": "jsch",
+							"host": "192.168.110.238",
+							"authType": "PUBLIC_KEY"
+						}
+					}
+				}
+			}
+		}
+	},
+	"network-profiles": {
+		"vas@gb-db": {
+			"name": "vas@gb-db",
+			"handlers": {
+				"ssh_tunnel": {
+					"type": "TUNNEL",
+					"enabled": true,
+					"save-password": true,
+					"properties": {
+						"port": 22,
+						"keyPath": "/home/vas/.ssh/id_rsa",
+						"implementation": "jsch",
+						"host": "192.168.110.238",
+						"authType": "PUBLIC_KEY"
+					}
+				}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Разработка",
+			"color": "255,255,255",
+			"description": "База данных для разработки",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}
