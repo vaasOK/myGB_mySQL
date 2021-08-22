@@ -24,22 +24,26 @@
 * mysql>
 * mysql>
 * */
-\! pwd
+-- \! pwd
 /*
 /home/vas
  */
+
+/*
 \! echo "[client]" >> ~/.my.cnf
 \! echo "user=vas" >> ~/.my.cnf
 \! echo "password=xxxxxx" >> ~/.my.cnf
 \! echo "" >> ~/.my.cnf
 \! cat ~/.my.cnf
+*/
+
 /*
 [client]
 user=vas
 password=xxxxxx
 */
 
-mysql> exit
+-- exit
 
 /*
 Bye
@@ -73,9 +77,9 @@ DROP DATABASE IF EXISTS example;
 CREATE DATABASE example;
 USE example;
 CREATE TABLE `users` (
-	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+	id BIGINT UNSIGNED NOT NULL UNIQUE,
 	name VARCHAR(50) 
-)
+);
 /*
 * 
 * * Задание 3
@@ -85,7 +89,8 @@ CREATE TABLE `users` (
 * 
 * 
 */
-SYSTEM mysqldump example > ~/vas_example.sql 
+SYSTEM ls ~;
+SYSTEM mysqldump example > ~/example.SQL ; 
 
 DROP DATABASE IF EXISTS sample;
 CREATE DATABASE sample;
@@ -93,7 +98,7 @@ USE sample;
 
 SHOW TABLES;
 
-SYSTEM mysql sample < ~/vas_example.sql ;
+SYSTEM mysql sample < ~/example.SQL ;
 
 SHOW TABLES;
 /*
@@ -106,6 +111,13 @@ SHOW TABLES;
 * 
 * 
 */
+/*
+
+mysqldump mysql --where='1 limit 100' help_keyword > ~/mysql_help_kw.sql
+
+
+*/
+
 
 
 
