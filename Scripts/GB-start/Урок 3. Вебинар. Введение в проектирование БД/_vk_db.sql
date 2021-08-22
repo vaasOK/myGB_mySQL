@@ -14,6 +14,7 @@ CREATE TABLE users (
     INDEX users_firstname_lastname_idx(firstname, lastname)
 ) COMMENT 'юзеры';
 
+
 DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
 	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
@@ -31,6 +32,9 @@ ALTER TABLE `profiles` ADD CONSTRAINT fk_user_id
     ON UPDATE CASCADE -- (значение по умолчанию)
     ON DELETE RESTRICT; -- (значение по умолчанию)
 
+
+
+    
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
 	id SERIAL, -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
@@ -42,6 +46,8 @@ CREATE TABLE messages (
     FOREIGN KEY (from_user_id) REFERENCES users(id),
     FOREIGN KEY (to_user_id) REFERENCES users(id)
 );
+
+
 
 DROP TABLE IF EXISTS friend_requests;
 CREATE TABLE friend_requests (

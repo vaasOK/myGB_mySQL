@@ -1,7 +1,7 @@
 {
 	"folders": {},
 	"connections": {
-		"mysql8-17b4c94ac60-39a13badd046f530": {
+		"mysql8-17b6fbabba8-4cf3748d113a3df7": {
 			"provider": "mysql",
 			"driver": "mysql8",
 			"name": "localhost",
@@ -12,7 +12,7 @@
 				"port": "3306",
 				"url": "jdbc:mysql://localhost:3306/",
 				"type": "dev",
-				"config-profile": "vas@gb-db",
+				"config-profile": "vasdb",
 				"auth-model": "native",
 				"handlers": {
 					"ssh_tunnel": {
@@ -32,8 +32,8 @@
 		}
 	},
 	"network-profiles": {
-		"vas@gb-db": {
-			"name": "vas@gb-db",
+		"vasdb": {
+			"name": "vasdb",
 			"handlers": {
 				"ssh_tunnel": {
 					"type": "TUNNEL",
