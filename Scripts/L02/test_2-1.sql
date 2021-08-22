@@ -13,7 +13,7 @@ USE example;
 CREATE TABLE `users` (
 	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
 	name VARCHAR(50) 
-)
+);
 /*
 * 
 * * Задание 3
