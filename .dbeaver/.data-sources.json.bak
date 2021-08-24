@@ -20,12 +20,23 @@
 						"enabled": true,
 						"save-password": true,
 						"properties": {
-							"port": 22,
-							"keyPath": "/home/vas/.ssh/id_rsa",
-							"implementation": "jsch",
 							"host": "192.168.110.238",
-							"authType": "PUBLIC_KEY"
+							"authType": "PUBLIC_KEY",
+							"port": 22.0,
+							"keyPath": "/home/vas/.ssh/id_rsa",
+							"implementation": "jsch"
 						}
+					}
+				}
+			}
+		}
+	},
+	"virtual-models": {
+		"mysql8-17b6fbabba8-4cf3748d113a3df7": {
+			"vk": {
+				"@properties": {
+					"erd.diagram.state": {
+						"serialized": "<diagram version=\"1\" name=\"vk\" time=\"202108232227\"><entities><data-source id=\"mysql8-17b6fbabba8-4cf3748d113a3df7\"><entity id=\"1\" name=\"age_restrictions\" fq-name=\"vk.age_restrictions\" order=\"0\" x=\"900\" y=\"20\"><path name=\"vk\"/></entity><entity id=\"2\" name=\"communities\" fq-name=\"vk.communities\" order=\"1\" x=\"1200\" y=\"640\"><path name=\"vk\"/></entity><entity id=\"3\" name=\"friend_requests\" fq-name=\"vk.friend_requests\" order=\"2\" x=\"80\" y=\"760\"><path name=\"vk\"/></entity><entity id=\"4\" name=\"game_scores\" fq-name=\"vk.game_scores\" order=\"3\" x=\"660\" y=\"380\"><path name=\"vk\"/></entity><entity id=\"5\" name=\"games\" fq-name=\"vk.games\" order=\"4\" x=\"900\" y=\"340\"><path name=\"vk\"/></entity><entity id=\"6\" name=\"likes\" fq-name=\"vk.likes\" order=\"5\" x=\"360\" y=\"380\"><path name=\"vk\"/></entity><entity id=\"7\" name=\"media\" fq-name=\"vk.media\" order=\"6\" x=\"540\" y=\"80\"><path name=\"vk\"/></entity><entity id=\"8\" name=\"media_types\" fq-name=\"vk.media_types\" order=\"7\" x=\"1200\" y=\"80\"><path name=\"vk\"/></entity><entity id=\"9\" name=\"messages\" fq-name=\"vk.messages\" order=\"8\" x=\"80\" y=\"500\"><path name=\"vk\"/></entity><entity id=\"10\" name=\"photo_albums\" fq-name=\"vk.photo_albums\" order=\"9\" x=\"1200\" y=\"460\"><path name=\"vk\"/></entity><entity id=\"11\" name=\"photos\" fq-name=\"vk.photos\" order=\"10\" x=\"1200\" y=\"280\"><path name=\"vk\"/></entity><entity id=\"12\" name=\"profiles\" fq-name=\"vk.profiles\" order=\"11\" x=\"80\" y=\"260\"><path name=\"vk\"/></entity><entity id=\"13\" name=\"users\" fq-name=\"vk.users\" order=\"12\" x=\"540\" y=\"740\"><path name=\"vk\"/></entity><entity id=\"14\" name=\"users_communities\" fq-name=\"vk.users_communities\" order=\"13\" x=\"1200\" y=\"820\"><path name=\"vk\"/></entity></data-source></entities><relations><relation name=\"games_ibfk_4\" fq-name=\"vk.games.games_ibfk_4\" type=\"fk\" pk-ref=\"1\" fk-ref=\"5\"/><relation name=\"games_ibfk_3\" fq-name=\"vk.games.games_ibfk_3\" type=\"fk\" pk-ref=\"2\" fk-ref=\"5\"/><relation name=\"users_communities_ibfk_2\" fq-name=\"vk.users_communities.users_communities_ibfk_2\" type=\"fk\" pk-ref=\"2\" fk-ref=\"14\"/><relation name=\"game_scores_ibfk_2\" fq-name=\"vk.game_scores.game_scores_ibfk_2\" type=\"fk\" pk-ref=\"5\" fk-ref=\"4\"/><relation name=\"likes_fk\" fq-name=\"vk.likes.likes_fk\" type=\"fk\" pk-ref=\"7\" fk-ref=\"6\"/><relation name=\"photos_ibfk_2\" fq-name=\"vk.photos.photos_ibfk_2\" type=\"fk\" pk-ref=\"7\" fk-ref=\"11\"/><relation name=\"profiles_fk_1\" fq-name=\"vk.profiles.profiles_fk_1\" type=\"fk\" pk-ref=\"7\" fk-ref=\"12\"/><relation name=\"games_ibfk_2\" fq-name=\"vk.games.games_ibfk_2\" type=\"fk\" pk-ref=\"8\" fk-ref=\"5\"/><relation name=\"media_ibfk_2\" fq-name=\"vk.media.media_ibfk_2\" type=\"fk\" pk-ref=\"8\" fk-ref=\"7\"/><relation name=\"photos_ibfk_1\" fq-name=\"vk.photos.photos_ibfk_1\" type=\"fk\" pk-ref=\"10\" fk-ref=\"11\"/><relation name=\"communities_ibfk_1\" fq-name=\"vk.communities.communities_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"2\"/><relation name=\"friend_requests_ibfk_1\" fq-name=\"vk.friend_requests.friend_requests_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"3\"/><relation name=\"friend_requests_ibfk_2\" fq-name=\"vk.friend_requests.friend_requests_ibfk_2\" type=\"fk\" pk-ref=\"13\" fk-ref=\"3\"/><relation name=\"game_scores_ibfk_1\" fq-name=\"vk.game_scores.game_scores_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"4\"/><relation name=\"games_ibfk_1\" fq-name=\"vk.games.games_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"5\"/><relation name=\"likes_fk_1\" fq-name=\"vk.likes.likes_fk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"6\"/><relation name=\"media_ibfk_1\" fq-name=\"vk.media.media_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"7\"/><relation name=\"messages_ibfk_1\" fq-name=\"vk.messages.messages_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"9\"/><relation name=\"messages_ibfk_2\" fq-name=\"vk.messages.messages_ibfk_2\" type=\"fk\" pk-ref=\"13\" fk-ref=\"9\"/><relation name=\"photo_albums_ibfk_1\" fq-name=\"vk.photo_albums.photo_albums_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"10\"/><relation name=\"fk_user_id\" fq-name=\"vk.profiles.fk_user_id\" type=\"fk\" pk-ref=\"13\" fk-ref=\"12\"/><relation name=\"users_communities_ibfk_1\" fq-name=\"vk.users_communities.users_communities_ibfk_1\" type=\"fk\" pk-ref=\"13\" fk-ref=\"14\"/></relations></diagram>"
 					}
 				}
 			}
@@ -40,11 +51,11 @@
 					"enabled": true,
 					"save-password": true,
 					"properties": {
-						"port": 22,
-						"keyPath": "/home/vas/.ssh/id_rsa",
-						"implementation": "jsch",
 						"host": "192.168.110.238",
-						"authType": "PUBLIC_KEY"
+						"authType": "PUBLIC_KEY",
+						"port": 22.0,
+						"keyPath": "/home/vas/.ssh/id_rsa",
+						"implementation": "jsch"
 					}
 				}
 			}

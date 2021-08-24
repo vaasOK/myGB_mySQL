@@ -1,11 +1,8 @@
 #
 #	скрипт преподавателя
 #
-DROP DATABASE IF EXISTS vk;
-CREATE DATABASE vk;
-USE vk;
 
-DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     firstname VARCHAR(50),
@@ -17,7 +14,6 @@ CREATE TABLE users (
     INDEX users_firstname_lastname_idx(firstname, lastname)
 ) COMMENT 'юзеры';
 
-DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
 	user_id BIGINT UNSIGNED NOT NULL UNIQUE,
     gender CHAR(1),
@@ -34,7 +30,6 @@ ALTER TABLE `profiles` ADD CONSTRAINT fk_user_id
     ON UPDATE CASCADE -- (значение по умолчанию)
     ON DELETE RESTRICT; -- (значение по умолчанию)
 
-DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
 	id SERIAL, -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
 	from_user_id BIGINT UNSIGNED NOT NULL,
@@ -46,7 +41,6 @@ CREATE TABLE messages (
     FOREIGN KEY (to_user_id) REFERENCES users(id)
 );
 
-DROP TABLE IF EXISTS friend_requests;
 CREATE TABLE friend_requests (
 	-- id SERIAL, -- изменили на составной ключ (initiator_user_id, target_user_id)
 	initiator_user_id BIGINT UNSIGNED NOT NULL,
@@ -65,7 +59,6 @@ CREATE TABLE friend_requests (
 -- ALTER TABLE friend_requests 
 -- ADD CHECK(initiator_user_id <> target_user_id);
 
-DROP TABLE IF EXISTS communities;
 CREATE TABLE communities(
 	id SERIAL,
 	name VARCHAR(150),
@@ -75,7 +68,6 @@ CREATE TABLE communities(
 	foreign key (admin_user_id) references users(id)
 );
 
-DROP TABLE IF EXISTS users_communities;
 CREATE TABLE users_communities(
 	user_id BIGINT UNSIGNED NOT NULL,
 	community_id BIGINT UNSIGNED NOT NULL,
@@ -85,7 +77,6 @@ CREATE TABLE users_communities(
     FOREIGN KEY (community_id) REFERENCES communities(id)
 );
 
-DROP TABLE IF EXISTS media_types;
 CREATE TABLE media_types(
 	id SERIAL,
     name VARCHAR(255), -- записей мало, поэтому в индексе нет необходимости
@@ -93,7 +84,6 @@ CREATE TABLE media_types(
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS media;
 CREATE TABLE media(
 	id SERIAL,
     media_type_id BIGINT UNSIGNED NOT NULL,
@@ -110,7 +100,6 @@ CREATE TABLE media(
     FOREIGN KEY (media_type_id) REFERENCES media_types(id)
 );
 
-DROP TABLE IF EXISTS likes;
 CREATE TABLE likes(
 	id SERIAL,
     user_id BIGINT UNSIGNED NOT NULL,
@@ -126,7 +115,6 @@ CREATE TABLE likes(
 */
 );
 
-DROP TABLE IF EXISTS `photo_albums`;
 CREATE TABLE `photo_albums` (
 	`id` SERIAL,
 	`name` varchar(255) DEFAULT NULL,
@@ -136,7 +124,6 @@ CREATE TABLE `photo_albums` (
   	PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `photos`;
 CREATE TABLE `photos` (
 	id SERIAL,
 	`album_id` BIGINT unsigned NULL,
@@ -146,17 +133,6 @@ CREATE TABLE `photos` (
     FOREIGN KEY (media_id) REFERENCES media(id)
 );
 
-ALTER TABLE vk.likes 
-ADD CONSTRAINT likes_fk 
-FOREIGN KEY (media_id) REFERENCES vk.media(id);
-
-ALTER TABLE vk.likes 
-ADD CONSTRAINT likes_fk_1 
-FOREIGN KEY (user_id) REFERENCES vk.users(id);
-
-ALTER TABLE vk.profiles 
-ADD CONSTRAINT profiles_fk_1 
-FOREIGN KEY (photo_id) REFERENCES media(id);
 
 
 
@@ -165,7 +141,6 @@ FOREIGN KEY (photo_id) REFERENCES media(id);
 --
 
 
-DROP TABLE IF EXISTS age_restrictions;
 CREATE TABLE age_restrictions(
 	
     id  SERIAL,  -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
@@ -177,7 +152,6 @@ CREATE TABLE age_restrictions(
 );
 
 
-DROP TABLE IF EXISTS games;
 CREATE TABLE games(
 	
     id SERIAL,  -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
@@ -195,13 +169,12 @@ CREATE TABLE games(
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT 'обновлена в VK',
 	
     FOREIGN KEY (author_id) REFERENCES users(id),
-    FOREIGN KEY (promo_id) REFERENCES media(id),
+    FOREIGN KEY (promo_id) REFERENCES media_types(id),
     FOREIGN KEY (communitie_id) REFERENCES communities(id),
     FOREIGN KEY (age_restriction_id) REFERENCES age_restrictions(id)
 );
 	
 	
-DROP TABLE IF EXISTS game_scores;
 CREATE TABLE game_scores(
 	
     game_id  BIGINT UNSIGNED NOT NULL,
