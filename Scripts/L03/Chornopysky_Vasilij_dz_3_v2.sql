@@ -36,7 +36,7 @@ CREATE TABLE games(
     updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT 'обновлена в VK',
 	
     FOREIGN KEY (author_id) REFERENCES users(id),
-    FOREIGN KEY (promo_id) REFERENCES media_types(id),
+    FOREIGN KEY (promo_id) REFERENCES media(id),
     FOREIGN KEY (communitie_id) REFERENCES communities(id),
     FOREIGN KEY (age_restriction_id) REFERENCES age_restrictions(id)
 );
