@@ -53,7 +53,9 @@ CREATE TABLE friend_requests (
     PRIMARY KEY (initiator_user_id, target_user_id),
     FOREIGN KEY (initiator_user_id) REFERENCES users(id),
     FOREIGN KEY (target_user_id) REFERENCES users(id)-- ,
-    -- CHECK (initiator_user_id <> target_user_id)
+    
+    -- CHECK (initiator_user_id != target_user_id)
+    
 );
 -- чтобы пользователь сам себе не отправил запрос в друзья
 -- ALTER TABLE friend_requests 
