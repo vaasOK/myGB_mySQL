@@ -180,7 +180,8 @@ ADD is_active TINYINT(1) UNSIGNED DEFAULT 1
 ;
 
 UPDATE profiles SET is_active = 0
-WHERE TIMESTAMPDIFF(YEAR, birthday, NOW()) < 18 
+WHERE TIMESTAMPDIFF(YEAR, birthday, NOW()) < 18
+ 
 ;
 
 
@@ -192,9 +193,40 @@ iv. Написать скрипт, удаляющий сообщения «из 
 ###select ....
 
 DELETE FROM messages
-WHERE TIMESTAMPDIFF(SECOND, created_at, NOW()) < 0
+-- WHERE TIMESTAMPDIFF(SECOND, created_at, NOW()) < 0
+WHERE created_at > NOW()
 ;
 
 /* Задача 5
 v. Написать название темы курсового проекта (в комментарии)
 */
+
+/*
+ * БД для администрирования системы удалённого доступа на основе OpenVPN
+ * 
+ * Сущности:
+ * - PKI, центры сертификации
+ * - Серверы OpenVPN
+ * - профили серверов
+ * - параметры серверов
+ * - пользователи
+ * - профили пользователей
+ * - категории пользователей
+ * - параметры клиентов (пользовательских программ)
+ * - ключи
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
