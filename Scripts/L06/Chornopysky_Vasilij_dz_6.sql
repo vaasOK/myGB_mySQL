@@ -1,13 +1,33 @@
+/*
+ * Практическое задание по теме 
+ * 		“Операторы, фильтрация, сортировка и ограничение. 
+ * 		Агрегация данных”. 
+ * 
+ * Работаем с БД vk и данными, которые вы сгенерировали ранее:
 
-/* Задача 1
+    1. Пусть задан некоторый пользователь. 
+    	Из всех пользователей соц. сети найдите человека, 
+    		который больше всех общался с выбранным пользователем 
+    		(написал ему сообщений).
+    		
+    2. Подсчитать общее количество лайков, 
+    	которые получили пользователи младше 10 лет..
+    
+    3. Определить кто больше поставил лайков (всего): 
+    	мужчины или женщины.
+
+*/
+
+/*
 i. Заполнить все таблицы БД vk данными (по 10-100 записей в каждой таблице)
 */
-DROP DATABASE IF EXISTS `vk_ch_vas_4` ;
-CREATE DATABASE `vk_ch_vas_4` ;
-USE vk_ch_vas_4;
+
+DROP DATABASE IF EXISTS `vk_ch_vas_6` ;
+CREATE DATABASE `vk_ch_vas_6` ;
+USE vk_ch_vas_6;
 
 
--- vk_ch_vas_4.users definition
+-- vk_ch_vas_6.users definition
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -24,7 +44,7 @@ CREATE TABLE `users` (
 )
 ;
 
-INSERT INTO vk_ch_vas_4.users
+INSERT INTO vk_ch_vas_6.users
 (id, firstname, lastname, email, password_hash, phone) VALUES
 (1, 'Clara', 'Bogisich', 'raymond30@example.net', '7b5cd4d7747097d5c3b69bc413d27d2ad9dbb087', 79106233246),
 (2, 'Martina', 'Lehner', 'ansel.rau@example.net', '80560fce279e7064d8c8934633c0ee9e54d32f43', 79374876133),
@@ -49,7 +69,7 @@ INSERT INTO vk_ch_vas_4.users
 ;
 
 
--- vk_ch_vas_4.profiles definition
+-- vk_ch_vas_6.profiles definition
 
 DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
@@ -65,10 +85,10 @@ CREATE TABLE `profiles` (
   -- , CONSTRAINT `profiles_FK` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`)
 )
 ;
--- ALTER TABLE vk_ch_vas_4.profiles DROP FOREIGN KEY profiles_FK;
--- ALTER TABLE vk_ch_vas_4.profiles ADD CONSTRAINT FK_profiles_photos FOREIGN KEY (photo_id) REFERENCES vk_ch_vas_4.photos(id);
+-- ALTER TABLE vk_ch_vas_6.profiles DROP FOREIGN KEY profiles_FK;
+-- ALTER TABLE vk_ch_vas_6.profiles ADD CONSTRAINT FK_profiles_photos FOREIGN KEY (photo_id) REFERENCES vk_ch_vas_6.photos(id);
 
-INSERT INTO vk_ch_vas_4.profiles
+INSERT INTO vk_ch_vas_6.profiles
 (user_id, gender, birthday, photo_id, created_at, hometown) VALUES
 (1, 'f', '1983-11-03', 1, '2020-10-03 19:16:58', NULL),
 (2, 'f', '1970-05-21', 2, '2020-09-10 02:52:55', NULL),
@@ -93,7 +113,12 @@ INSERT INTO vk_ch_vas_4.profiles
 ;
 
 
--- vk_ch_vas_4.messages definition
+ALTER TABLE profiles 
+ADD is_active BIT DEFAULT 1
+;
+
+
+-- vk_ch_vas_6.messages definition
 
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
@@ -109,7 +134,7 @@ CREATE TABLE `messages` (
   , FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`)
 );
 
-INSERT INTO vk_ch_vas_4.messages
+INSERT INTO vk_ch_vas_6.messages
 (from_user_id, to_user_id, body, created_at) VALUES
 (2, 1, 'Sint dolores et debitis est ducimus. Aut et quia beatae minus. Ipsa rerum totam modi sunt sed. Voluptas atque eum et odio ea molestias ipsam architecto.', '2021-08-29 15:27:15'),
 (3, 1, 'Sed mollitia quo sequi nisi est tenetur at rerum. Sed quibusdam illo ea facilis nemo sequi. Et tempora repudiandae saepe quo.', '1993-09-14 19:45:58'),
@@ -153,95 +178,106 @@ INSERT INTO vk_ch_vas_4.messages
 (6, 16, 'Atque enim consequatur ab non aperiam qui nobis. Commodi deleniti aut at eos et atque expedita. Voluptas eum voluptatum et unde officiis non.', '2011-11-08 19:17:41')
 ;
 
+-- vk_ch_vas_6.likes definition
 
-/* Задача 2
-ii. Написать скрипт, 
-	возвращающий список имен (только firstname) пользователей 
-		без повторений в алфавитном порядке
-*/
--- выборки данных
-select distinct firstname
-from users
-order by firstname
-;
+DROP TABLE IF EXISTS `likes`;
+CREATE TABLE `likes` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `who_liked_id` bigint unsigned NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY `id` (`id`),
+  KEY `likes_users` (`user_id`),
+  -- KEY `likes_who_liked` (`media_id`),
+  -- CONSTRAINT `likes_who_liked` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `likes_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+);
 
-/* Задача 3
-iii. Написать скрипт, 
-	отмечающий несовершеннолетних пользователей как неактивных 
-		(поле is_active = false). 
-	Предварительно добавить такое поле в таблицу profiles 
-		со значением по умолчанию = true (или 1)
-*/
-
--- ALTER TABLE vk_ch_vas_4.profiles DROP COLUMN is_active;	-- для отладки
-ALTER TABLE profiles 
--- ADD is_active ENUM(true, false), DEFAULT true
--- 
--- 
--- ADD is_active TINYINT(1) UNSIGNED DEFAULT 1
--- 
--- 
--- !!!
--- 
--- 
---  Замечание от преподавателя:
--- Поле is_active - логическое, 
--- т.е. должно принимать только значения "да", "нет". 
--- Поэтому для него в MySQL в качестве типа данных 
--- разумнее выбирать BIT.
--- 
-ADD is_active BIT DEFAULT 1
--- 
--- !!!
-;
-
-UPDATE profiles SET is_active = 0
-WHERE TIMESTAMPDIFF(YEAR, birthday, NOW()) < 18
+INSERT INTO vk_ch_vas_6.likes
+(id, user_id, who_liked_id, created_at) VALUES
+(1, 1, 1, '1980-03-27 21:18:20'),
+(2, 2, 2, '1989-05-31 15:38:01'),
+(3, 2, 7, '2011-03-11 07:27:25'),
+(4, 4, 4, '2004-12-23 07:18:23'),
+(5, 9, 4, '1975-10-27 17:04:20'),
+(6, 6, 6, '2004-10-22 16:24:56'),
+(7, 9, 1, '1973-05-09 14:36:19'),
+(8, 8, 1, '1971-12-25 05:18:34'),
+(9, 9, 9, '2006-08-05 22:55:53'),
+(10, 10, 10, '1986-04-07 08:45:04'),
+(11, 11, 11, '2001-05-24 13:29:12'),
+(12, 12, 15, '2005-05-24 11:43:59'),
+(13, 12, 13, '2019-09-23 05:52:06'),
+(14, 12, 14, '2017-05-19 15:31:31'),
+(15, 15, 15, '1995-08-18 09:51:27'),
+(16, 15, 16, '2011-01-29 19:17:58'),
+(17, 17, 17, '1984-06-28 05:29:44'),
+(18, 18, 18, '2003-09-20 11:50:09'),
+(19, 19, 17, '1982-07-11 05:10:41'),
+(20, 20, 20, '1994-01-06 05:03:01')
 ;
 
 
-/* Задача 4
-iv. Написать скрипт, удаляющий сообщения «из будущего» (дата больше сегодняшней)
-*/
-
-# выборки данных
-###select ....
-
-DELETE FROM messages
--- WHERE TIMESTAMPDIFF(SECOND, created_at, NOW()) < 0
-WHERE created_at > NOW()
-;
-
-/* Задача 5
-v. Написать название темы курсового проекта (в комментарии)
-*/
 
 /*
- * БД для администрирования системы удалённого доступа на основе OpenVPN
  * 
- * Сущности:
- * - PKI, центры сертификации
- * - Серверы OpenVPN
- * - профили серверов
- * - параметры серверов
- * - пользователи
- * - профили пользователей
- * - категории пользователей
- * - параметры клиентов (пользовательских программ)
- * - ключи
+ * 1. Пусть задан некоторый пользователь. 
+ *   	Из всех пользователей соц. сети найдите человека, 
+ *   		который больше всех общался с выбранным пользователем 
+ *   		(написал ему сообщений).
+ * */
+SELECT 
+	 from_user_id as 'этот пользователь отправил больше всего сообщений'
+   -- , COUNT(*)
+FROM messages
+WHERE to_user_id = 8
+GROUP BY from_user_id
+ORDER BY COUNT(*) DESC 
+LIMIT 1
+;
+
+
+/*
+ *  2. Подсчитать общее количество лайков, 
+    	которые получили пользователи младше 10 лет..
+ * 
+ * в моём варианте данных - ДР пользователей
+ * не оказалось пользователей младше 10 лет
+ * 
+ * для учебной задачи изменим возраст пользователя
+ * до 30 лет (чтобы не переделывать INSERT-ы с данными...) 
+ */
+SELECT 
+	-- 	*
+	 COUNT(*) as 'всего лайков получено пользователями младше xx лет'
+from likes
+WHERE who_liked_id IN (
+		SELECT user_id 
+			-- , birthday 
+		FROM profiles
+		WHERE birthday + INTERVAL 30 YEAR < NOW() 		
+	)
+;
+
+
+/*
+ * 
+ *   3. Определить кто больше поставил лайков (всего): 
+    	мужчины или женщины.
+ * 
+ * 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT 
+	  gender as 'этот gender поставил больше всего лайков'
+	, COUNT(*) as 'количество лайков'
+FROM profiles
+WHERE user_id IN (
+	SELECT user_id 
+	FROM likes
+	)
+group by gender 
+ORDER BY COUNT(*) DESC
+limit 1
+;
 
