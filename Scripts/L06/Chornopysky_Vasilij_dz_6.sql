@@ -226,6 +226,8 @@ INSERT INTO vk_ch_vas_6.likes
  *   		который больше всех общался с выбранным пользователем 
  *   		(написал ему сообщений).
  * */
+
+-- первый вариант, ищет просто id
 SELECT 
 	 from_user_id as 'этот пользователь отправил больше всего сообщений'
    -- , COUNT(*)
@@ -235,6 +237,23 @@ GROUP BY from_user_id
 ORDER BY COUNT(*) DESC 
 LIMIT 1
 ;
+
+-- второй вариант, ищет уже ФИО
+SELECT 
+	firstname
+	, lastname
+FROM users
+WHERE users.id  = 
+	(SELECT from_user_id 
+		FROM messages
+		WHERE to_user_id = 8
+		GROUP BY from_user_id
+		ORDER BY COUNT(*)  DESC 
+		LIMIT 1
+	)
+;
+
+
 
 
 /*
@@ -251,8 +270,8 @@ SELECT
 	-- 	*
 	 COUNT(*) as 'всего лайков получено пользователями младше xx лет'
 from likes
-WHERE who_liked_id IN (
-		SELECT user_id 
+WHERE who_liked_id IN 
+	(SELECT user_id 
 			-- , birthday 
 		FROM profiles
 		WHERE birthday + INTERVAL 30 YEAR < NOW() 		
