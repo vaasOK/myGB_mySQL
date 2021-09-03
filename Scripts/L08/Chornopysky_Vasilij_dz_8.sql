@@ -227,7 +227,7 @@ INSERT INTO vk_ch_vas_6.likes
 SELECT 
 	CONCAT( u.firstname, ' ', u.lastname) as max_sender
 	-- , m.from_user_id
-	,count(*) as "msg_count"
+	,COUNT(*) as "msg_count"
 FROM messages as m 
 JOIN users as u ON u.id = m.from_user_id 
 WHERE m.to_user_id = 8
