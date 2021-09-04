@@ -7,7 +7,7 @@ USE vk;
 
 DROP TABLE IF EXISTS users;	# строго говоря, таблицы не будет - выше удалили всь базу
 CREATE TABLE users(
-	id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	#id2 SERIAL, #BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE # SERIAL - псевдотип
 	firstname VARCHAR(200),
 	lastname VARCHAR(200) COMMENT 'фамилия...',
