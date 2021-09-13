@@ -1,13 +1,14 @@
 /*
  * https://docs.google.com/document/d/1spUZwRiyKVwo7tB4X9NVUkPXvLoFc8UQ53LAkpPcURo/edit#
-
 Практическое задание по теме “Операторы, фильтрация, сортировка и ограничение”
-
-1. Пусть в таблице users поля created_at и updated_at оказались незаполненными. 
-	Заполните их текущими датой и временем.
 */
 
 USE test;
+
+/*
+1. Пусть в таблице users поля created_at и updated_at оказались незаполненными. 
+	Заполните их текущими датой и временем.
+*/
 
 UPDATE users 
   SET   created_at = CURRENT_TIMESTAMP,
@@ -23,52 +24,41 @@ UPDATE users
 		сохранив введеные ранее значения.
 */
 
+
+/*
+ * да, после просмотра видеоразбора понял, что можно было обойтись без временных столбцов
+ * 
+ * (ошибочно считал, что преобразование типа данных у столбца с заполненными значениями может привести к потере этих значений.)
+ */
+
+
 ALTER TABLE users 
-ADD bad_date VARCHAR(20); 
-
-
-INSERT INTO test.users
-	(name, birthday_at, created_at, updated_at, bad_date)
-VALUES
-	  ('b_name_1', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '20.10.2017 8:10')
-	, ('b_name_2', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '20.9.2018 8:10')
-	, ('b_name_3', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '20.11.2015 05:04')
-	, ('b_name_4', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '20.04.2011 07:10')
-	, ('b_name_5', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '20.10.2002 15:6')
+ADD tmp_date DATETIME
 ;
-
--- SELECT STR_TO_DATE("20.10.2017 8:10", "%d.%m.%Y %k:%i");
- 	
-ALTER TABLE users 
-ADD tmp_date DATETIME; 
-
 UPDATE users 
-	SET tmp_date = STR_TO_DATE(bad_date, "%d.%m.%Y %k:%i")
---   , SET tmp_date = STR_TO_DATE(created_at, "%d.%m.%Y %k:%i")
+  , SET tmp_date = STR_TO_DATE(created_at, "%d.%m.%Y %k:%i")
 --   , SET tmp_date = STR_TO_DATE(updated_at, "%d.%m.%Y %k:%i")
-WHERE name LIKE 'b_name%'
 ;
-
-ALTER TABLE users 
-DROP COLUMN  bad_date
-;
-
-
-
 UPDATE users 
-	SET bad_date = NULL 
+	SET created_at = NULL 
 ;
-
 ALTER TABLE users
-MODIFY COLUMN bad_date DATETIME
+MODIFY COLUMN created_at DATETIME
 ;
-
-
 UPDATE users 
-	SET bad_date = tmp_date
-WHERE name LIKE 'b_name%'
+	SET created_at = tmp_date
 ;
-
+UPDATE users 
+  , SET tmp_date = STR_TO_DATE(updated_at, "%d.%m.%Y %k:%i")
+;
+UPDATE users 
+	SET updated_at = NULL 
+;
+ALTER TABLE users
+MODIFY COLUMN updated_at DATETIME
+;
+UPDATE users 
+	SET updated_at = tmp_date
 
 ALTER TABLE users 
 DROP COLUMN  tmp_date
@@ -76,7 +66,6 @@ DROP COLUMN  tmp_date
 
 
 
-	
 /*
 3. В таблице складских запасов storehouses_products 
 	в поле value могут встречаться самые разные цифры: 
@@ -86,6 +75,34 @@ DROP COLUMN  tmp_date
 		чтобы они выводились в порядке увеличения значения value. 
 		Однако, нулевые запасы должны выводиться в конце, после всех записей.
 */
+
+/*
+ * "Подсмотрел" решение в видеоразборе, но сделал "по своему" 
+ * как по мне, условие для функции IF() у меня несколько понятнее... 
+ */
+
+DROP TABLE IF EXISTS `storehouses_products`;
+CREATE TABLE storehouses_products (
+    id SERIAL PRIMARY KEY COMMENT 'id записи о товаре'
+  , product_id INT UNSIGNED COMMENT 'id товара'
+  , value INT UNSIGNED COMMENT 'количество товара на складе'
+) COMMENT 'модель таблицы складских запасов';
+
+INSERT INTO storehouses_products 
+    (product_id, value )
+VALUES
+    (5754, 0)
+  , (2345, 2500)
+  , (4345, 0)
+  , (4523, 30)
+  , (3442, 500)
+  , (1234, 1)
+;
+
+SELECT *
+FROM storehouses_products
+ORDER BY IF(value=0, 1, 0), value  
+;
 
 
 /*
@@ -98,9 +115,12 @@ USE shop
 ;
 
 SELECT name,  DATE_FORMAT(birthday_at, "%M") 
-	FROM users
+	FROM users 
  	WHERE DATE_FORMAT(birthday_at, "%M") IN ('may', 'august')
 ;
+
+
+
 
 /*
 5.(по желанию) 
@@ -108,8 +128,15 @@ SELECT name,  DATE_FORMAT(birthday_at, "%M")
 		SELECT * FROM catalogs WHERE id IN (5, 1, 2); 
 	Отсортируйте записи в порядке, заданном в списке IN.
 */
+USE shop
+;
 
-
+SELECT * 
+  FROM  catalogs
+  WHERE id in (5, 1, 2)
+  ORDER BY FIELD(id, 5, 1, 2)
+;
+/*
 USE sakila
 ;
 SELECT * 
@@ -117,20 +144,17 @@ SELECT *
   WHERE actor_id in (5, 1, 2)
   ORDER BY FIELD(actor_id, 5, 1, 2)
  ;
-
-
-
+*/
 
 /*
 Практическое задание теме “Агрегация данных”
 
 1. Подсчитайте средний возраст пользователей в таблице users
 */
-
 USE shop 
 ;
 SELECT 	
-ROUND(AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW())), 1) AS AVG_age 
+AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW())) AS AVG_age 
 FROM users
 ;
 
@@ -139,17 +163,19 @@ FROM users
 		которые приходятся на каждый из дней недели. 
 	Следует учесть, что необходимы дни недели текущего года, а не года рождения.
 */
+
 SELECT 
 	DAYNAME( 
 		CONCAT( 
 		    DATE_FORMAT(CURRENT_TIMESTAMP, '%Y')
 		  , "-"  
 		  , DATE_FORMAT(birthday_at, '%m-%d')
-		)
-	) AS dn
-  , COUNT(*)
+			)
+		) AS week_day
+  , COUNT(*) AS quantity 
 FROM users u 
-GROUP BY dn
+GROUP BY week_day
+ORDER BY quantity
 ;
 
 
@@ -157,5 +183,22 @@ GROUP BY dn
 3. (по желанию) Подсчитайте произведение чисел в столбце таблицы
 */
 
+/*
+ * Решение "подсмотрел" в видеоразборе ДЗ
+ * Своё решение делал через все логарифмы )
+ */
 
+USE shop
+;
 
+-- SELECT id, LOG10(id), SUM(LOG10(id)) 
+-- SELECT SUM(LOG10(id))
+SELECT 
+    POW (10, SUM(LOG10(id)))AS base_10_mult
+  , ROUND (POW(10, SUM(LOG10(id)))) AS round_base_10_mult
+  , POW(2, SUM(LOG(2, id)))AS base_2_mult
+  , ROUND(POW(2, SUM(LOG2(id)))) AS round_base_2_mult
+  , EXP(SUM(LN(id)))AS base_e_mult
+  , ROUND(EXP(SUM(LN(id)))) AS round_base_10_mult
+FROM catalogs c 
+;
