@@ -128,22 +128,20 @@ VALUES
 
 SELECT 
     f.id AS "номер рейса"
-  , (
-	   SELECT 
-	       name
-	   FROM 
-	       cities c1 
-	   WHERE 
-	       c1.label = f.`from` 
-	) AS "откуда"
-  , (
-       SELECT 
+  , (SELECT 
+           name
+       FROM
+           cities c1
+       WHERE
+           c1.label = f.`from`
+	  ) AS "откуда"
+  , (SELECT 
          name
-       FROM 
-         cities c2 
-       WHERE 
-         c2.label = f.`to` 
-    ) AS "куда" 
+       FROM
+         cities c2
+       WHERE
+         c2.label = f.`to`
+      ) AS "куда" 
 FROM 
 	flights f 
 ;
@@ -151,19 +149,19 @@ FROM
 -- JOIN 
 
 SELECT 
-    f.id "номер рейса"
-  , c1.name "откуда"
-  , c2.name "куда"
-FROM 
-    flights f
-JOIN
-    cities c1
-JOIN
-    cities c2 
-WHERE 
-    f.`from` = c1.label 
-  AND 
-    f.`to` = c2.label 
-ORDER BY
-    f.id 
-;
+      f.id "номер рейса"
+    , c1.name "откуда"
+    , c2.name "куда"
+	FROM 
+	    flights f
+	JOIN
+	    cities c1
+	JOIN
+	    cities c2 
+	WHERE 
+	    f.`from` = c1.label 
+	  AND 
+	    f.`to` = c2.label 
+	ORDER BY
+	    f.id 
+	;

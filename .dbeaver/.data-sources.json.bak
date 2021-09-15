@@ -102,6 +102,13 @@
 						}
 					}
 				}
+			},
+			"test": {
+				"@properties": {
+					"erd.diagram.state": {
+						"serialized": "<diagram version=\"1\" name=\"test\" time=\"202109122058\"><entities><data-source id=\"mysql8-17b6fbabba8-4cf3748d113a3df7\"><entity id=\"1\" name=\"catalogs\" fq-name=\"test.catalogs\" order=\"0\" x=\"1200\" y=\"420\"><path name=\"test\"/></entity><entity id=\"2\" name=\"discounts\" fq-name=\"test.discounts\" order=\"1\" x=\"1200\" y=\"40\"><path name=\"test\"/></entity><entity id=\"3\" name=\"orders\" fq-name=\"test.orders\" order=\"2\" x=\"400\" y=\"80\"><path name=\"test\"/></entity><entity id=\"4\" name=\"orders_products\" fq-name=\"test.orders_products\" order=\"3\" x=\"400\" y=\"340\"><path name=\"test\"/></entity><entity id=\"5\" name=\"products\" fq-name=\"test.products\" order=\"4\" x=\"80\" y=\"340\"><path name=\"test\"/></entity><entity id=\"6\" name=\"rubrics\" fq-name=\"test.rubrics\" order=\"5\" x=\"1200\" y=\"280\"><path name=\"test\"/></entity><entity id=\"7\" name=\"storehouses\" fq-name=\"test.storehouses\" order=\"6\" x=\"1520\" y=\"20\"><path name=\"test\"/></entity><entity id=\"8\" name=\"storehouses_products\" fq-name=\"test.storehouses_products\" order=\"7\" x=\"1260\" y=\"660\"><path name=\"test\"/></entity><entity id=\"9\" name=\"tbl\" fq-name=\"test.tbl\" order=\"8\" x=\"800\" y=\"680\"><path name=\"test\"/></entity><entity id=\"10\" name=\"tbl1\" fq-name=\"test.tbl1\" order=\"9\" x=\"60\" y=\"720\"><path name=\"test\"/></entity><entity id=\"11\" name=\"tbl2\" fq-name=\"test.tbl2\" order=\"10\" x=\"300\" y=\"720\"><path name=\"test\"/></entity><entity id=\"12\" name=\"users\" fq-name=\"test.users\" order=\"11\" border-width=\"3\" x=\"80\" y=\"80\"><path name=\"test\"/></entity><entity id=\"13\" name=\"vk_ch_vas_4.users\" fq-name=\"test.`vk_ch_vas_4.users`\" order=\"12\" x=\"960\" y=\"660\"><path name=\"test\"/></entity></data-source></entities><relations/></diagram>"
+					}
+				}
 			}
 		}
 	},
