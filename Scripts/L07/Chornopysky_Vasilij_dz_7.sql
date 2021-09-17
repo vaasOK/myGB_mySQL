@@ -31,21 +31,21 @@ VALUES
 --  Вложенный SELECT 
 
 SELECT name
-FROM users u 
-WHERE id IN (
-	SELECT user_id 
-	FROM orders
+  FROM users u 
+ WHERE id IN (
+	  SELECT user_id 
+	    FROM orders
 	GROUP BY user_id
 	)
 ;
 
 -- JOIN
 
-SELECT u.name
-FROM users u  
-JOIN orders o
-WHERE u.id = o.user_id
-GROUP BY u.name 
+   SELECT u.name
+     FROM users u  
+     JOIN orders o
+    WHERE u.id = o.user_id
+ GROUP BY u.name 
 ;
 
 
@@ -58,25 +58,20 @@ GROUP BY u.name
 
 --  Вложенный SELECT 
 
-SELECT 
-    p.name
-  , (SELECT c.name 
-	FROM catalogs c 
-	WHERE c.id = p.catalog_id ) AS catalog  
-FROM products p
+SELECT  p.name
+       , (SELECT c.name 
+	        FROM catalogs c 
+	       WHERE c.id = p.catalog_id ) AS catalog  
+  FROM products p
 ;
 
 -- JOIN 
 
-SELECT 
-    p.name prod_name 
-  , c.name cat_name
-FROM 
-    products p
-JOIN
-    catalogs c 
-WHERE 
-    c.id = p.catalog_id 
+SELECT p.name prod_name 
+     , c.name cat_name
+  FROM products p
+  JOIN catalogs c 
+ WHERE c.id = p.catalog_id 
 ;
 
 /*
@@ -98,13 +93,13 @@ CREATE TABLE `flights`(
   , `to` VARCHAR(100) NOT NULL
 );
 INSERT INTO `flights`
-    (`from`, `to`)
-VALUES
-    ('moscow', 'omsk')
-  , ('novgorod', 'kazan') 
-  , ('irkutsk', 'moscow') 
-  , ('omsk', 'irkutsk') 
-  , ('moscow', 'kazan') 
+            (`from`, `to`)
+     VALUES
+            ('moscow', 'omsk')
+          , ('novgorod', 'kazan') 
+          , ('irkutsk', 'moscow') 
+          , ('omsk', 'irkutsk') 
+          , ('moscow', 'kazan') 
 ;
 
 DROP TABLE IF EXISTS `cities`
@@ -127,41 +122,39 @@ VALUES
 --  Вложенный SELECT 
 
 SELECT 
-    f.id AS "номер рейса"
-  , (SELECT 
-           name
-       FROM
-           cities c1
-       WHERE
-           c1.label = f.`from`
-	  ) AS "откуда"
-  , (SELECT 
-         name
-       FROM
-         cities c2
-       WHERE
-         c2.label = f.`to`
-      ) AS "куда" 
-FROM 
-	flights f 
+       f.id AS "номер рейса"
+     , (SELECT 
+               name
+          FROM 
+               cities AS c1
+         WHERE 
+               c1.label = f.`from`) AS "откуда"
+     , (SELECT 
+               name
+          FROM 
+               cities AS c2
+         WHERE 
+               c2.label = f.`to`) AS "куда" 
+  FROM 
+       flights AS f 
 ;
 
 -- JOIN 
 
-SELECT 
-      f.id "номер рейса"
-    , c1.name "откуда"
-    , c2.name "куда"
+  SELECT 
+         f.id "номер рейса"
+       , c1.name "откуда"
+       , c2.name "куда"
 	FROM 
-	    flights f
+	     flights f
 	JOIN
-	    cities c1
+	     cities c1
 	JOIN
-	    cities c2 
-	WHERE 
-	    f.`from` = c1.label 
-	  AND 
-	    f.`to` = c2.label 
-	ORDER BY
-	    f.id 
-	;
+	     cities c2 
+   WHERE 
+	     f.`from` = c1.label 
+     AND 
+	     f.`to` = c2.label 
+ORDER BY
+         f.id 
+       ;
